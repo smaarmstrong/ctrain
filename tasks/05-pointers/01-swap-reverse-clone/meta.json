@@ -1,0 +1,7 @@
+{
+  "title": "swap, reverse, clone — pointers and ownership",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Pass and return data through pointers; allocate with malloc and hand ownership to the caller",
+  "difficulty": "core",
+  "est_min": 15
+}
