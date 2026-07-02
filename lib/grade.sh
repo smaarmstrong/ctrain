@@ -27,6 +27,10 @@ set -u
 CC="${CC:-cc}"
 CFLAGS_BASE=(-std=c11 -Wall -Wextra -Werror -g)
 
+# Learner code may loop forever; every run helper is capped (seconds).
+RUN_TIMEOUT="${CTRAIN_TIMEOUT:-10}"
+_run() { timeout --signal=KILL "$RUN_TIMEOUT" "$@"; }
+
 # ----- colours ---------------------------------------------------------------
 if [ -t 1 ]; then
   C_G=$'\033[32m'; C_R=$'\033[31m'; C_Y=$'\033[33m'
@@ -104,18 +108,18 @@ c_compile_san() {
 run_ok() {
   local desc="$1"; shift
   local log="$_TMP/run.log"
-  if "$@" >"$log" 2>&1; then _pass "$desc"; else _fail "$desc"; _show_log "$log"; fi
+  if _run "$@" >"$log" 2>&1; then _pass "$desc"; else _fail "$desc"; _show_log "$log"; fi
 }
 
 run_fails() {
   local desc="$1"; shift
-  if "$@" >/dev/null 2>&1; then _fail "$desc"; else _pass "$desc"; fi
+  if _run "$@" >/dev/null 2>&1; then _fail "$desc"; else _pass "$desc"; fi
 }
 
 expect_out() {
   local desc="$1" want="$2"; shift 2
   local got
-  got="$("$@" 2>/dev/null)"
+  got="$(_run "$@" 2>/dev/null)"
   if [ "$got" = "$want" ]; then
     _pass "$desc"
   else
@@ -128,7 +132,7 @@ expect_out() {
 expect_out_stdin() {
   local desc="$1" input="$2" want="$3"; shift 3
   local got
-  got="$(printf '%s' "$input" | "$@" 2>/dev/null)"
+  got="$(printf '%s' "$input" | _run "$@" 2>/dev/null)"
   if [ "$got" = "$want" ]; then
     _pass "$desc"
   else
@@ -142,7 +146,7 @@ expect_out_stdin() {
 diff_out() {
   local desc="$1" want="$2"; shift 2
   local got="$_TMP/got.out" d="$_TMP/diff.out"
-  "$@" >"$got" 2>/dev/null
+  _run "$@" >"$got" 2>/dev/null
   if diff -u "$want" "$got" >"$d" 2>&1; then
     _pass "$desc"
   else
@@ -163,7 +167,7 @@ mem_check() {
   if san_available; then
     if ASAN_OPTIONS="detect_leaks=1:abort_on_error=0:exitcode=99" \
        UBSAN_OPTIONS="halt_on_error=1:print_stacktrace=1" \
-       "$@" >"$log" 2>&1; then
+       _run "$@" >"$log" 2>&1; then
       _pass "$desc (ASan/UBSan clean)"
     else
       _fail "$desc (ASan/UBSan reported errors)"
@@ -171,7 +175,8 @@ mem_check() {
       _show_log "$_TMP/mem-brief.log"
     fi
   elif command -v valgrind >/dev/null 2>&1; then
-    if valgrind --quiet --error-exitcode=99 --leak-check=full \
+    if timeout --signal=KILL $((RUN_TIMEOUT * 4)) \
+         valgrind --quiet --error-exitcode=99 --leak-check=full \
          --errors-for-leak-kinds=definite,possible "$@" >"$log" 2>&1; then
       _pass "$desc (valgrind clean)"
     else
@@ -180,7 +185,7 @@ mem_check() {
     fi
   else
     printf "  %s! no sanitizers or valgrind found — memory checks skipped%s\n" "$C_Y" "$C_0"
-    if "$@" >"$log" 2>&1; then _pass "$desc (plain run)"; else _fail "$desc (plain run)"; _show_log "$log"; fi
+    if _run "$@" >"$log" 2>&1; then _pass "$desc (plain run)"; else _fail "$desc (plain run)"; _show_log "$log"; fi
   fi
 }
 
