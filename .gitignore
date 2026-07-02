@@ -1,4 +1,4 @@
 ctrain
 work/
 *.o
-*.out
+a.out
