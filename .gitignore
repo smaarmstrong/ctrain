@@ -1,0 +1,4 @@
+ctrain
+work/
+*.o
+a.out
