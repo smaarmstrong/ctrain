@@ -1,0 +1,7 @@
+{
+  "title": "msh — a tiny shell with fork/exec and two builtins",
+  "domain": "Composite Projects",
+  "objective": "Wire the classic REPL loop: prompt, tokenize, builtins in-process, fork + execvp + wait for everything else, exact exit statuses",
+  "difficulty": "advanced",
+  "est_min": 40
+}

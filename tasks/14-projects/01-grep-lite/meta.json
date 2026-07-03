@@ -1,0 +1,7 @@
+{
+  "title": "greplite — a small grep with flags and real exit codes",
+  "domain": "Composite Projects",
+  "objective": "Build a complete command-line text utility: argv parsing, file arguments, stdin fallback, and grep's 0/1/2 exit-code contract",
+  "difficulty": "core",
+  "est_min": 30
+}

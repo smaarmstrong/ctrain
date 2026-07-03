@@ -1,0 +1,7 @@
+{
+  "title": "vec — a growable array for elements of any size",
+  "domain": "Composite Projects",
+  "objective": "Design and ship a small library: an opaque type behind a header, byte-wise generic storage, growth, insert/remove, and clean ownership",
+  "difficulty": "core",
+  "est_min": 40
+}
