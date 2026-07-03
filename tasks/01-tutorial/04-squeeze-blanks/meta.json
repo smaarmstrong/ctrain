@@ -1,0 +1,7 @@
+{
+  "title": "squeeze blanks — character-at-a-time I/O",
+  "domain": "Ch1 · Tutorial",
+  "objective": "Read a stream with getchar until EOF, write with putchar, and carry one bit of state between characters",
+  "difficulty": "core",
+  "est_min": 10
+}

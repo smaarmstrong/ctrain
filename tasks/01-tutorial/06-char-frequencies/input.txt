@@ -1,0 +1,6 @@
+Invoice 2026-07-02  #4711
+qty 3 x widget @ 1.25 = 3.75
+	total:	9.99 (incl. 0% VAT)
+bytes: ÿþ ok
+
+end 0123456789
