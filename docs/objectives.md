@@ -5,132 +5,132 @@ what a modern C programmer needs that the book predates. Each objective is
 ticked when at least one task exercises it. Canonical K&R exercises appear
 in adapted, re-worded form.
 
-Task counts are targets for the full build (~100 tasks overall).
+97 tasks across 14 domains — every objective below is exercised by at least one task.
 
-## 01-tutorial — K&R Ch1: A Tutorial Introduction (~8 tasks)
-- [ ] hello world, compiling and running (`cc`, `-o`, exit status)
-- [ ] variables, arithmetic, `printf` formatting
-- [ ] temperature conversion table (the classic, re-worded)
-- [ ] reading characters: `getchar`/`putchar`, EOF
-- [ ] counting lines, words, characters (wc-shaped)
-- [ ] arrays: counting digit/whitespace frequencies
-- [ ] first functions: `power`-style helper
-- [ ] character arrays: longest-line
+## 01-tutorial — K&R Ch1: A Tutorial Introduction (8 tasks)
+- [x] hello world, compiling and running (`cc`, `-o`, exit status)
+- [x] variables, arithmetic, `printf` formatting
+- [x] temperature conversion table (the classic, re-worded)
+- [x] reading characters: `getchar`/`putchar`, EOF
+- [x] counting lines, words, characters (wc-shaped)
+- [x] arrays: counting digit/whitespace frequencies
+- [x] first functions: `power`-style helper
+- [x] character arrays: longest-line
 
-## 02-types — K&R Ch2: Types, Operators, Expressions (~7 tasks)
-- [ ] integer and floating types, ranges, `<limits.h>`/`<float.h>`
-- [ ] constants, string literals, enums
-- [ ] implicit conversions and casts
-- [ ] char arithmetic (atoi/lower-style, re-worded)
-- [ ] bitwise operators: get/set/toggle bit fields in an int
-- [ ] shifts, masks (bitcount-style)
-- [ ] precedence and associativity pitfalls
-- [ ] modern: fixed-width types `<stdint.h>`, `size_t`, `bool` (C11 `<stdbool.h>`)
+## 02-types — K&R Ch2: Types, Operators, Expressions (8 tasks)
+- [x] integer and floating types, ranges, `<limits.h>`/`<float.h>`
+- [x] constants, string literals, enums
+- [x] implicit conversions and casts
+- [x] char arithmetic (atoi/lower-style, re-worded)
+- [x] bitwise operators: get/set/toggle bit fields in an int
+- [x] shifts, masks (bitcount-style)
+- [x] precedence and associativity pitfalls
+- [x] modern: fixed-width types `<stdint.h>`, `size_t`, `bool` (C11 `<stdbool.h>`)
 
-## 03-control — K&R Ch3: Control Flow (~6 tasks)
-- [ ] if/else chains, ternary
-- [ ] switch (with fallthrough discipline)
-- [ ] while/for equivalence
-- [ ] do-while (itoa-style, re-worded)
-- [ ] break/continue
-- [ ] loops + validation: binary search over a sorted array
+## 03-control — K&R Ch3: Control Flow (6 tasks)
+- [x] if/else chains, ternary
+- [x] switch (with fallthrough discipline)
+- [x] while/for equivalence
+- [x] do-while (itoa-style, re-worded)
+- [x] break/continue
+- [x] loops + validation: binary search over a sorted array
 
-## 04-functions — K&R Ch4: Functions & Program Structure (~7 tasks)
-- [ ] function definitions, prototypes, return values
-- [ ] separate compilation: multi-file build, headers, include guards
-- [ ] external and static variables, linkage
-- [ ] register/auto/scope rules
-- [ ] recursion (printd/qsort-style, re-worded)
-- [ ] the C preprocessor: #include, #define basics
-- [ ] modern: `inline`, `_Static_assert`, designated initializers
+## 04-functions — K&R Ch4: Functions & Program Structure (7 tasks)
+- [x] function definitions, prototypes, return values
+- [x] separate compilation: multi-file build, headers, include guards
+- [x] external and static variables, linkage
+- [x] register/auto/scope rules
+- [x] recursion (printd/qsort-style, re-worded)
+- [x] the C preprocessor: #include, #define basics
+- [x] modern: `inline`, `_Static_assert`, designated initializers
 
-## 05-pointers — K&R Ch5: Pointers & Arrays (~10 tasks)
-- [ ] pointer basics: & and *, swap via pointers
-- [ ] pointers vs arrays, pointer arithmetic
-- [ ] strings: strlen/strcpy/strcmp by hand (re-worded)
-- [ ] pointer arrays: sorting lines
-- [ ] multidimensional arrays: day-of-year style
-- [ ] command-line arguments: argc/argv (echo/grep-lite)
-- [ ] pointers to functions: generic sort with comparator
-- [ ] dynamic memory: malloc/free with ownership discipline (ASan-enforced)
-- [ ] realloc growth patterns: dynamic array
-- [ ] complicated declarations (dcl-style, re-worded)
+## 05-pointers — K&R Ch5: Pointers & Arrays (10 tasks)
+- [x] pointer basics: & and *, swap via pointers
+- [x] pointers vs arrays, pointer arithmetic
+- [x] strings: strlen/strcpy/strcmp by hand (re-worded)
+- [x] pointer arrays: sorting lines
+- [x] multidimensional arrays: day-of-year style
+- [x] command-line arguments: argc/argv (echo/grep-lite)
+- [x] pointers to functions: generic sort with comparator
+- [x] dynamic memory: malloc/free with ownership discipline (ASan-enforced)
+- [x] realloc growth patterns: dynamic array
+- [x] complicated declarations (dcl-style, re-worded)
 
-## 06-structs — K&R Ch6: Structures (~8 tasks)
-- [ ] struct basics, initialization, struct functions
-- [ ] arrays of structs (keyword counting-style)
-- [ ] pointers to structs, ->
-- [ ] typedef
-- [ ] self-referential structs: singly linked list (ASan-enforced)
-- [ ] binary search tree (word frequency-style, re-worded)
-- [ ] hash table with chaining (ASan-enforced)
-- [ ] unions and bit-fields
+## 06-structs — K&R Ch6: Structures (8 tasks)
+- [x] struct basics, initialization, struct functions
+- [x] arrays of structs (keyword counting-style)
+- [x] pointers to structs, ->
+- [x] typedef
+- [x] self-referential structs: singly linked list (ASan-enforced)
+- [x] binary search tree (word frequency-style, re-worded)
+- [x] hash table with chaining (ASan-enforced)
+- [x] unions and bit-fields
 
-## 07-io — K&R Ch7: Input & Output (~7 tasks)
-- [ ] formatted output: printf specifiers, width/precision
-- [ ] formatted input: scanf and its hazards; parsing with sscanf
-- [ ] file access: fopen/fclose/fgets/fputs (cat-style)
-- [ ] error handling: stderr, exit status, errno/perror
-- [ ] line input and ungetc
-- [ ] binary I/O: fread/fwrite records
-- [ ] buffering: setvbuf, fflush semantics
+## 07-io — K&R Ch7: Input & Output (7 tasks)
+- [x] formatted output: printf specifiers, width/precision
+- [x] formatted input: scanf and its hazards; parsing with sscanf
+- [x] file access: fopen/fclose/fgets/fputs (cat-style)
+- [x] error handling: stderr, exit status, errno/perror
+- [x] line input and ungetc
+- [x] binary I/O: fread/fwrite records
+- [x] buffering: setvbuf, fflush semantics
 
-## 08-system — K&R Ch8: The UNIX System Interface (~6 tasks)
-- [ ] file descriptors: read/write syscalls (cat via fd)
-- [ ] open/creat/close/unlink, flags and modes
-- [ ] lseek and random access
-- [ ] implementing a getchar-style buffered reader over read(2)
-- [ ] directory listing: opendir/readdir (fsize-style, re-worded)
-- [ ] a storage allocator's shape: sbrk-era ideas in modern terms (advanced)
+## 08-system — K&R Ch8: The UNIX System Interface (6 tasks)
+- [x] file descriptors: read/write syscalls (cat via fd)
+- [x] open/creat/close/unlink, flags and modes
+- [x] lseek and random access
+- [x] implementing a getchar-style buffered reader over read(2)
+- [x] directory listing: opendir/readdir (fsize-style, re-worded)
+- [x] a storage allocator's shape: sbrk-era ideas in modern terms (advanced)
 
-## 09-stdlib — The Standard Library (~7 tasks)
-- [ ] string.h: strtok/strstr/strchr/memcpy/memmove correctness
-- [ ] ctype.h: classification and case mapping
-- [ ] stdlib.h: strtol/strtod (with full error handling), qsort/bsearch
-- [ ] math.h: floating point, rounding, HUGE_VAL/errno
-- [ ] time.h: time/localtime/strftime
-- [ ] rand/srand and shuffling correctly
-- [ ] assert.h and defensive programming
+## 09-stdlib — The Standard Library (7 tasks)
+- [x] string.h: strtok/strstr/strchr/memcpy/memmove correctness
+- [x] ctype.h: classification and case mapping
+- [x] stdlib.h: strtol/strtod (with full error handling), qsort/bsearch
+- [x] math.h: floating point, rounding, HUGE_VAL/errno
+- [x] time.h: time/localtime/strftime
+- [x] rand/srand and shuffling correctly
+- [x] assert.h and defensive programming
 
-## 10-preprocessor — Preprocessor & Macros (~5 tasks)
-- [ ] object- and function-like macros, argument pitfalls (parenthesisation)
-- [ ] conditional compilation: #if/#ifdef/#error
-- [ ] include guards vs #pragma once
-- [ ] stringizing (#) and pasting (##), variadic macros (__VA_ARGS__)
-- [ ] macros vs inline functions vs const — when each
+## 10-preprocessor — Preprocessor & Macros (5 tasks)
+- [x] object- and function-like macros, argument pitfalls (parenthesisation)
+- [x] conditional compilation: #if/#ifdef/#error
+- [x] include guards vs #pragma once
+- [x] stringizing (#) and pasting (##), variadic macros (__VA_ARGS__)
+- [x] macros vs inline functions vs const — when each
 
-## 11-ub — Undefined Behaviour & Memory Safety (~6 tasks)
-- [ ] signed overflow and how to check safely
-- [ ] out-of-bounds access: find-and-fix under ASan
-- [ ] use-after-free and double free: find-and-fix under ASan
-- [ ] uninitialised reads; strict aliasing basics
-- [ ] sequence points / unsequenced modification
-- [ ] integer conversion traps (size_t underflow, char signedness)
+## 11-ub — Undefined Behaviour & Memory Safety (6 tasks)
+- [x] signed overflow and how to check safely
+- [x] out-of-bounds access: find-and-fix under ASan
+- [x] use-after-free and double free: find-and-fix under ASan
+- [x] uninitialised reads; strict aliasing basics
+- [x] sequence points / unsequenced modification
+- [x] integer conversion traps (size_t underflow, char signedness)
 
-## 12-dsa — Data Structures & Algorithms in C (~9 tasks)
-- [ ] stack (array-backed, hidden tests)
-- [ ] queue / ring buffer (hidden tests)
-- [ ] doubly linked list with full ownership (ASan-enforced)
-- [ ] binary search tree: insert/find/delete/traverse
-- [ ] hash table: open addressing or chaining, resize
-- [ ] insertion sort, then mergesort (stable, hidden tests)
-- [ ] quicksort with comparator (qsort-compatible signature)
-- [ ] binary search variants (first/last occurrence)
-- [ ] a generic container using void* and function pointers (advanced)
+## 12-dsa — Data Structures & Algorithms in C (9 tasks)
+- [x] stack (array-backed, hidden tests)
+- [x] queue / ring buffer (hidden tests)
+- [x] doubly linked list with full ownership (ASan-enforced)
+- [x] binary search tree: insert/find/delete/traverse
+- [x] hash table: open addressing or chaining, resize
+- [x] insertion sort, then mergesort (stable, hidden tests)
+- [x] quicksort with comparator (qsort-compatible signature)
+- [x] binary search variants (first/last occurrence)
+- [x] a generic container using void* and function pointers (advanced)
 
-## 13-tooling — Build, Debug, Diagnose (~6 tasks)
-- [ ] write a Makefile: targets, variables, pattern rules, .PHONY
-- [ ] multi-file project layout: headers, objects, linking
-- [ ] reading compiler warnings: fix a warning-riddled file (-Werror)
-- [ ] gdb: scripted debugging to extract a runtime fact
-- [ ] valgrind/ASan: diagnose a leaky program and fix it
-- [ ] compile-time hardening flags; -O2 vs -O0 observable differences
+## 13-tooling — Build, Debug, Diagnose (6 tasks)
+- [x] write a Makefile: targets, variables, pattern rules, .PHONY
+- [x] multi-file project layout: headers, objects, linking
+- [x] reading compiler warnings: fix a warning-riddled file (-Werror)
+- [x] gdb: scripted debugging to extract a runtime fact
+- [x] valgrind/ASan: diagnose a leaky program and fix it
+- [x] compile-time hardening flags; -O2 vs -O0 observable differences
 
-## 14-projects — Composite Projects (~4 tasks, multi-file, end-to-end)
-- [ ] a text utility: wc/grep-lite with flags (argv parsing, files, exit codes)
-- [ ] a generic data-structure library (header + impl + tests, ASan-clean)
-- [ ] a tiny interactive shell: prompt, fork/exec, wait, builtins (advanced)
-- [ ] a K&R-style storage allocator or arena (bonus)
+## 14-projects — Composite Projects (4 tasks, multi-file, end-to-end)
+- [x] a text utility: wc/grep-lite with flags (argv parsing, files, exit codes)
+- [x] a generic data-structure library (header + impl + tests, ASan-clean)
+- [x] a tiny interactive shell: prompt, fork/exec, wait, builtins (advanced)
+- [x] a K&R-style storage allocator or arena (bonus)
 
 ## Quality bars (apply to every task)
 - graders test behaviour/output, not style — any correct implementation passes
