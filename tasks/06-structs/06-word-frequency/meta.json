@@ -1,0 +1,7 @@
+{
+  "title": "word frequency with a binary search tree",
+  "domain": "Ch6 · Structures",
+  "objective": "Build a BST of counted words from stdin, print it in order, and free every node",
+  "difficulty": "advanced",
+  "est_min": 25
+}

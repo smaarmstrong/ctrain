@@ -1,0 +1,7 @@
+{
+  "title": "tagged unions and bit-fields",
+  "domain": "Ch6 · Structures",
+  "objective": "Dispatch on a tagged union safely and pack/unpack flags through bit-field members",
+  "difficulty": "core",
+  "est_min": 20
+}

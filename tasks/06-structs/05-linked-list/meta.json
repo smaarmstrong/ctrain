@@ -1,0 +1,7 @@
+{
+  "title": "singly linked list — build, insert, free",
+  "domain": "Ch6 · Structures",
+  "objective": "Work with self-referential structs: heap-build a list, insert in order, free every node",
+  "difficulty": "core",
+  "est_min": 20
+}

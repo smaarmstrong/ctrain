@@ -1,0 +1,7 @@
+{
+  "title": "hash map with separate chaining",
+  "domain": "Ch6 · Structures",
+  "objective": "Build an opaque string-to-int hash table with chained buckets, key copies, and full cleanup",
+  "difficulty": "advanced",
+  "est_min": 30
+}

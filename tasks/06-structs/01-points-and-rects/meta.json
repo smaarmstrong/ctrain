@@ -1,0 +1,7 @@
+{
+  "title": "points and rectangles",
+  "domain": "Ch6 · Structures",
+  "objective": "Define structs, initialize them, and pass and return them by value",
+  "difficulty": "intro",
+  "est_min": 10
+}
