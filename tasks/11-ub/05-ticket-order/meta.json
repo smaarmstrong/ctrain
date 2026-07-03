@@ -1,0 +1,7 @@
+{
+  "title": "ticket dispenser — impose an order on unsequenced calls",
+  "domain": "Undefined Behaviour & Memory Safety",
+  "objective": "Rewrite expressions whose side effects have no guaranteed order into defined, sequenced code",
+  "difficulty": "core",
+  "est_min": 15
+}
