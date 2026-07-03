@@ -1,0 +1,7 @@
+{
+  "title": "a bump arena allocator with free-all",
+  "domain": "Ch8 · The UNIX System Interface",
+  "objective": "Manage a raw memory region yourself: aligned bump allocation, exhaustion, reset, destroy",
+  "difficulty": "advanced",
+  "est_min": 30
+}

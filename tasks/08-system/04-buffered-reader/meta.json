@@ -1,0 +1,7 @@
+{
+  "title": "a buffered reader over read(2)",
+  "domain": "Ch8 · The UNIX System Interface",
+  "objective": "Build a getchar-style buffering layer on the read syscall, with one byte of pushback",
+  "difficulty": "core",
+  "est_min": 20
+}

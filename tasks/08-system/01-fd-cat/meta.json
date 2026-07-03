@@ -1,0 +1,7 @@
+{
+  "title": "cat with raw file descriptors",
+  "domain": "Ch8 · The UNIX System Interface",
+  "objective": "Copy bytes with the read/write syscalls alone — no stdio buffering layer",
+  "difficulty": "core",
+  "est_min": 15
+}
