@@ -1,0 +1,7 @@
+{
+  "title": "declare and conquer — gnarly pointer declarations",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Write and use an array of function pointers, a function returning a function pointer, and a pointer to an array",
+  "difficulty": "advanced",
+  "est_min": 25
+}

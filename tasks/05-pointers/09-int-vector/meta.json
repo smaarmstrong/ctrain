@@ -1,0 +1,7 @@
+{
+  "title": "int vector — realloc doubling with clean ownership",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Build a growable array on malloc/realloc/free with an exact doubling policy and no leaks",
+  "difficulty": "core",
+  "est_min": 20
+}

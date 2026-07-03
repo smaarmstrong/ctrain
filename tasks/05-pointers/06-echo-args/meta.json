@@ -1,0 +1,7 @@
+{
+  "title": "echo the arguments — first steps with argv",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Walk argc/argv and reproduce the classic echo behaviour byte-for-byte",
+  "difficulty": "intro",
+  "est_min": 8
+}

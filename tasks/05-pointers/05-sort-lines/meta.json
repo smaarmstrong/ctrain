@@ -1,0 +1,7 @@
+{
+  "title": "sort lines — an array of char pointers",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Read lines into dynamically allocated storage, sort an array of pointers, print in order",
+  "difficulty": "core",
+  "est_min": 20
+}

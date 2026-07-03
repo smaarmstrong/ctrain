@@ -1,0 +1,7 @@
+{
+  "title": "day of year — a 2-D month table",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Index a two-dimensional lookup table and return results through pointer out-parameters",
+  "difficulty": "core",
+  "est_min": 15
+}
