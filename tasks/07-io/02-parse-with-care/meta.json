@@ -1,0 +1,7 @@
+{
+  "title": "Parse with care — fgets + sscanf, not raw scanf",
+  "domain": "Ch7 · Input & Output",
+  "objective": "Parse line-based input robustly with fgets + sscanf, rejecting malformed lines instead of misreading them",
+  "difficulty": "core",
+  "est_min": 15
+}

@@ -1,0 +1,7 @@
+{
+  "title": "head with proper error handling",
+  "domain": "Ch7 · Input & Output",
+  "objective": "Report failures on stderr with errno detail and meaningful exit statuses while keeping stdout clean",
+  "difficulty": "core",
+  "est_min": 15
+}

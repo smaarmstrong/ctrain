@@ -1,0 +1,7 @@
+{
+  "title": "line_limited and next_int — bounded reads and ungetc",
+  "domain": "Ch7 · Input & Output",
+  "objective": "Read lines into a bounded buffer without losing data, and push back lookahead characters with ungetc",
+  "difficulty": "core",
+  "est_min": 20
+}
