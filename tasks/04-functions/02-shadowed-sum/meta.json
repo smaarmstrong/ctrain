@@ -1,0 +1,7 @@
+{
+  "title": "the sum that stayed at zero",
+  "domain": "Ch4 · Functions & Program Structure",
+  "objective": "Understand block scope: find and fix an inner declaration that shadows an outer variable",
+  "difficulty": "intro",
+  "est_min": 7
+}

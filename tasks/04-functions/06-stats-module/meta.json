@@ -1,0 +1,7 @@
+{
+  "title": "split a program into a module: stats.h / stats.c",
+  "domain": "Ch4 · Functions & Program Structure",
+  "objective": "Build a multi-file program: a header with an include guard, an implementation file, and a driver compiled separately",
+  "difficulty": "core",
+  "est_min": 20
+}

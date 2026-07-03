@@ -1,0 +1,7 @@
+{
+  "title": "recursion: radix formatter and in-place sort",
+  "domain": "Ch4 · Functions & Program Structure",
+  "objective": "Write recursive functions: emit digits most-significant-first and sort by divide and conquer",
+  "difficulty": "core",
+  "est_min": 18
+}
