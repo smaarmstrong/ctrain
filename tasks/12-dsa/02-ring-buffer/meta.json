@@ -1,0 +1,7 @@
+{
+  "title": "a FIFO queue on a ring buffer",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Build a heap-allocated fixed-capacity queue with wraparound indexing behind an opaque handle",
+  "difficulty": "core",
+  "est_min": 15
+}

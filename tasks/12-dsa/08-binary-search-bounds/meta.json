@@ -1,0 +1,7 @@
+{
+  "title": "binary search for first and last occurrence",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Adapt binary search to return the boundaries of a run of duplicates in logarithmic time",
+  "difficulty": "core",
+  "est_min": 15
+}

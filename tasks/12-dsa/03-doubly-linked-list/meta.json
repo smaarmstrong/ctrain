@@ -1,0 +1,7 @@
+{
+  "title": "a doubly linked list that owns its nodes",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Manage node allocation, both-end operations, and mid-list removal without leaking or dangling",
+  "difficulty": "core",
+  "est_min": 20
+}
