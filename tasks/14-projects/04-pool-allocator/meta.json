@@ -1,0 +1,7 @@
+{
+  "title": "pool — a malloc/free-style allocator over one buffer",
+  "domain": "Composite Projects",
+  "objective": "Build a storage allocator: block headers inside the pool, alignment, splitting on allocation, and coalescing adjacent free blocks",
+  "difficulty": "bonus",
+  "est_min": 40
+}
