@@ -1,0 +1,7 @@
+{
+  "title": "count lines, words and characters",
+  "domain": "Ch1 · Tutorial",
+  "objective": "Track state across a character stream: line, word and character counts in one pass",
+  "difficulty": "core",
+  "est_min": 15
+}

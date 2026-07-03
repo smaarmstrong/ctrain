@@ -1,0 +1,7 @@
+{
+  "title": "longest line of input",
+  "domain": "Ch1 · Tutorial",
+  "objective": "Buffer lines in character arrays, keep the running best, and handle the last-line-without-newline edge",
+  "difficulty": "core",
+  "est_min": 20
+}

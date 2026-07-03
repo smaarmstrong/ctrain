@@ -1,0 +1,7 @@
+{
+  "title": "digit and whitespace frequencies",
+  "domain": "Ch1 · Tutorial",
+  "objective": "Use an array indexed by computed values to tally character classes in one pass",
+  "difficulty": "core",
+  "est_min": 15
+}

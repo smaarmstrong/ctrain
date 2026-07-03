@@ -1,0 +1,7 @@
+{
+  "title": "int_pow — a first function",
+  "domain": "Ch1 · Tutorial",
+  "objective": "Define and call a function with parameters and a return value; handle the degenerate cases of exponentiation",
+  "difficulty": "core",
+  "est_min": 10
+}
