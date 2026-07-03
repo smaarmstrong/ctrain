@@ -1,0 +1,7 @@
+{
+  "title": "Classify exam scores into bands",
+  "domain": "Ch3 · Control Flow",
+  "objective": "Chain if/else branches (and use the ternary operator) to classify values",
+  "difficulty": "intro",
+  "est_min": 8
+}

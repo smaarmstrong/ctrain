@@ -1,0 +1,7 @@
+{
+  "title": "Count Collatz steps",
+  "domain": "Ch3 · Control Flow",
+  "objective": "Drive condition-controlled loops (while and for are interchangeable) to a data-dependent stop",
+  "difficulty": "core",
+  "est_min": 12
+}

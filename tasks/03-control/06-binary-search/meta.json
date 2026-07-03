@@ -1,0 +1,7 @@
+{
+  "title": "Binary search: first occurrence in a sorted array",
+  "domain": "Ch3 · Control Flow",
+  "objective": "Maintain a loop invariant over shrinking bounds; validate edges and never read outside the array",
+  "difficulty": "core",
+  "est_min": 18
+}

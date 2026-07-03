@@ -1,0 +1,7 @@
+{
+  "title": "Summarise sensor readings with break and continue",
+  "domain": "Ch3 · Control Flow",
+  "objective": "Use break for a sentinel stop and continue to skip bad data inside one read loop",
+  "difficulty": "core",
+  "est_min": 10
+}

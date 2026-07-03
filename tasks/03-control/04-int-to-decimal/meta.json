@@ -1,0 +1,7 @@
+{
+  "title": "Integer to decimal string with a do-while",
+  "domain": "Ch3 · Control Flow",
+  "objective": "Use a do-while to emit at least one digit; handle sign, zero and INT_MIN without overflow",
+  "difficulty": "core",
+  "est_min": 15
+}
