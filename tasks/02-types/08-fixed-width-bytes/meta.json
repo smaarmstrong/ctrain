@@ -1,0 +1,7 @@
+{
+  "title": "fixed-width types and a byte protocol",
+  "domain": "Ch2 · Types, Operators & Expressions",
+  "objective": "Use <stdint.h> widths, size_t, and <stdbool.h> to assemble and split little-endian values byte by byte",
+  "difficulty": "core",
+  "est_min": 15
+}

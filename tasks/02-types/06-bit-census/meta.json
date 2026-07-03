@@ -1,0 +1,7 @@
+{
+  "title": "bit census: count, locate, rotate, mirror",
+  "domain": "Ch2 · Types, Operators & Expressions",
+  "objective": "Population count, trailing-zero count, rotation, and bit reversal with shifts and masks — no oversized shifts",
+  "difficulty": "advanced",
+  "est_min": 25
+}

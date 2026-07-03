@@ -1,0 +1,7 @@
+{
+  "title": "months as an enumeration",
+  "domain": "Ch2 · Types, Operators & Expressions",
+  "objective": "Model a closed set with an enum, return string literals safely, use bool parameters",
+  "difficulty": "core",
+  "est_min": 12
+}

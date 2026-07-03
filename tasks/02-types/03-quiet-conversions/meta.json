@@ -1,0 +1,7 @@
+{
+  "title": "quiet conversions, loud bugs",
+  "domain": "Ch2 · Types, Operators & Expressions",
+  "objective": "Control implicit conversions with well-placed casts: widen before you overflow, clamp before you truncate",
+  "difficulty": "core",
+  "est_min": 15
+}

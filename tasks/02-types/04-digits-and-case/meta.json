@@ -1,0 +1,7 @@
+{
+  "title": "digits and case, by arithmetic",
+  "domain": "Ch2 · Types, Operators & Expressions",
+  "objective": "Treat chars as small integers: digit values, hex values, case flipping, and a hand-rolled decimal parser",
+  "difficulty": "core",
+  "est_min": 12
+}
