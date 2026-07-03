@@ -1,0 +1,7 @@
+{
+  "title": "string stack — fix a use-after-free and a double free",
+  "domain": "Undefined Behaviour & Memory Safety",
+  "objective": "Diagnose ownership bugs: a pop that frees what it hands out, a destroy that can free twice",
+  "difficulty": "advanced",
+  "est_min": 25
+}

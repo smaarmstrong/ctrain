@@ -1,0 +1,7 @@
+{
+  "title": "bounded_copy — hunt down an off-by-one buffer overflow",
+  "domain": "Undefined Behaviour & Memory Safety",
+  "objective": "Find and fix an out-of-bounds write in a bounded string copy",
+  "difficulty": "core",
+  "est_min": 15
+}

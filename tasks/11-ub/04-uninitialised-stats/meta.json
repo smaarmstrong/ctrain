@@ -1,0 +1,7 @@
+{
+  "title": "stats — chase down two uninitialised variables",
+  "domain": "Undefined Behaviour & Memory Safety",
+  "objective": "Find and fix locals that are read before they are ever assigned",
+  "difficulty": "intro",
+  "est_min": 10
+}

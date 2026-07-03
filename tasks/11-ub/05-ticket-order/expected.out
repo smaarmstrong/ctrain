@@ -1,0 +1,7 @@
+alice: 1
+bob: 2
+carol: 3
+pair: left=4 right=5
+pair: left=6 right=7
+slot 8 stores 9
+total issued: 9

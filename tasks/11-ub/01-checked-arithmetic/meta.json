@@ -1,0 +1,7 @@
+{
+  "title": "checked arithmetic — detect overflow before it happens",
+  "domain": "Undefined Behaviour & Memory Safety",
+  "objective": "Write add/sub/mul helpers that detect signed overflow without ever performing it",
+  "difficulty": "core",
+  "est_min": 15
+}

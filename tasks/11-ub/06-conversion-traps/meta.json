@@ -1,0 +1,7 @@
+{
+  "title": "conversion traps — a wrapped size_t and a char that swallowed EOF",
+  "domain": "Undefined Behaviour & Memory Safety",
+  "objective": "Find and fix an unsigned-underflow loop bound and an fgetc result stored in a char",
+  "difficulty": "core",
+  "est_min": 15
+}
