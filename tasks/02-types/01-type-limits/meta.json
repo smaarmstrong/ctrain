@@ -1,0 +1,7 @@
+{
+  "title": "a tour of the numeric limits",
+  "domain": "Ch2 · Types, Operators & Expressions",
+  "objective": "Find type ranges in <limits.h>/<float.h> and print each with the right format specifier",
+  "difficulty": "intro",
+  "est_min": 8
+}

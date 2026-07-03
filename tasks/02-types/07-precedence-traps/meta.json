@@ -1,0 +1,7 @@
+{
+  "title": "precedence traps: fix what the compiler saw",
+  "domain": "Ch2 · Types, Operators & Expressions",
+  "objective": "Diagnose and repair classic precedence and associativity mistakes: chained comparison, & vs ==, shift vs +, ternary binding",
+  "difficulty": "core",
+  "est_min": 10
+}
