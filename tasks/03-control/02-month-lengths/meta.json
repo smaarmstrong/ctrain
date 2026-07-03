@@ -1,0 +1,7 @@
+{
+  "title": "Month lengths with a fallthrough switch",
+  "domain": "Ch3 · Control Flow",
+  "objective": "Use switch with deliberate case fallthrough to group months sharing a length",
+  "difficulty": "core",
+  "est_min": 12
+}
