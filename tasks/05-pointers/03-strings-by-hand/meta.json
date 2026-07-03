@@ -1,0 +1,7 @@
+{
+  "title": "strings by hand — length, copy, compare",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Implement the classic string primitives with raw pointer walks, no <string.h> allowed",
+  "difficulty": "core",
+  "est_min": 15
+}

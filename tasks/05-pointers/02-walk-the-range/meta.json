@@ -1,0 +1,7 @@
+{
+  "title": "walk the range — pointer arithmetic on half-open ranges",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Treat a pair of pointers as a half-open range; walk, search and count with pointer arithmetic",
+  "difficulty": "intro",
+  "est_min": 10
+}

@@ -1,0 +1,7 @@
+{
+  "title": "generic sort — a comparator function pointer",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Write a type-blind sort over raw bytes driven by a caller-supplied comparison function",
+  "difficulty": "core",
+  "est_min": 25
+}

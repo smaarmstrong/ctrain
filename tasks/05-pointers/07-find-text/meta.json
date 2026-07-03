@@ -1,0 +1,7 @@
+{
+  "title": "find-text — a grep-lite with flags",
+  "domain": "Ch5 · Pointers & Arrays",
+  "objective": "Parse option flags from argv, filter stdin by substring match, report via exit status",
+  "difficulty": "core",
+  "est_min": 20
+}
