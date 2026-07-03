@@ -1,0 +1,7 @@
+{
+  "title": "running stats through struct pointers",
+  "domain": "Ch6 · Structures",
+  "objective": "Mutate and read structs through pointers with the -> operator",
+  "difficulty": "core",
+  "est_min": 15
+}

@@ -1,0 +1,7 @@
+{
+  "title": "sales tally — an array of records",
+  "domain": "Ch6 · Structures",
+  "objective": "Aggregate input into an array of structs with linear lookup, K&R keyword-count style",
+  "difficulty": "core",
+  "est_min": 15
+}

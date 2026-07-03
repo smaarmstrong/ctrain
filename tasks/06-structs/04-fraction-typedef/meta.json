@@ -1,0 +1,7 @@
+{
+  "title": "a Frac typedef in lowest terms",
+  "domain": "Ch6 · Structures",
+  "objective": "Name a struct with typedef and keep an invariant (lowest terms, positive denominator) across operations",
+  "difficulty": "core",
+  "est_min": 15
+}
