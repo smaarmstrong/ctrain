@@ -1,0 +1,7 @@
+{
+  "title": "Fixed-size records — fwrite, fread, fseek",
+  "domain": "Ch7 · Input & Output",
+  "objective": "Write and randomly access fixed-size binary records with fwrite/fread/fseek and an exact byte layout",
+  "difficulty": "advanced",
+  "est_min": 25
+}

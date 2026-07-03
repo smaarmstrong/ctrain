@@ -1,0 +1,7 @@
+{
+  "title": "mycat — concatenate files with stdio",
+  "domain": "Ch7 · Input & Output",
+  "objective": "Open, read, write and close files with fopen/fgets/fputs/fclose, falling back to stdin",
+  "difficulty": "core",
+  "est_min": 12
+}

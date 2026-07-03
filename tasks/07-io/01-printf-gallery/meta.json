@@ -1,0 +1,7 @@
+{
+  "title": "Stock report — printf widths and precision",
+  "domain": "Ch7 · Input & Output",
+  "objective": "Drive printf conversion specifiers, field widths and precision to produce an exactly aligned report",
+  "difficulty": "intro",
+  "est_min": 8
+}

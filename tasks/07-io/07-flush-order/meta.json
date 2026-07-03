@@ -1,0 +1,7 @@
+{
+  "title": "Tick-tock — buffering and fflush",
+  "domain": "Ch7 · Input & Output",
+  "objective": "Control stream buffering so stdout/stderr interleave correctly when both are redirected to one file",
+  "difficulty": "core",
+  "est_min": 10
+}
