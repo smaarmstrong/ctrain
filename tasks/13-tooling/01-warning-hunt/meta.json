@@ -1,0 +1,7 @@
+{
+  "title": "Warning hunt: make it -Werror-clean",
+  "domain": "Tooling: Build, Debug, Diagnose",
+  "objective": "Read compiler diagnostics and fix every warning without changing the program's behaviour",
+  "difficulty": "intro",
+  "est_min": 10
+}

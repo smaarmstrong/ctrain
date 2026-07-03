@@ -1,0 +1,7 @@
+{
+  "title": "Split a monolith into modules with incremental rebuilds",
+  "domain": "Tooling: Build, Debug, Diagnose",
+  "objective": "Carve a program into header + implementation + driver, with a Makefile that recompiles only what changed",
+  "difficulty": "advanced",
+  "est_min": 25
+}

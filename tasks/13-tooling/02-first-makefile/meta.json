@@ -1,0 +1,7 @@
+{
+  "title": "Your first Makefile: targets, objects, .PHONY clean",
+  "domain": "Tooling: Build, Debug, Diagnose",
+  "objective": "Write a Makefile that builds via object files, rebuilds only when needed, and has a working .PHONY clean",
+  "difficulty": "core",
+  "est_min": 15
+}

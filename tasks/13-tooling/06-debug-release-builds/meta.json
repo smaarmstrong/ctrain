@@ -1,0 +1,7 @@
+{
+  "title": "two builds of the same program",
+  "domain": "Tooling: Build, Debug, Diagnose",
+  "objective": "Drive compile-time behaviour from a Makefile: -D flags, assert vs NDEBUG, debug vs release",
+  "difficulty": "core",
+  "est_min": 20
+}
