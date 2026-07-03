@@ -1,0 +1,7 @@
+{
+  "title": "Feature flags with conditional compilation",
+  "domain": "Preprocessor & Macros",
+  "objective": "Use #ifdef, #ifndef defaults, #if arithmetic and #error to make one source file build into several program variants",
+  "difficulty": "intro",
+  "est_min": 10
+}

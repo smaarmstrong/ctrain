@@ -1,0 +1,9 @@
+42
+2 + 2
+640
+apples = 3
+apples + pears = 7
+10 * apples - pears = 26
+[log] startup
+[log] loaded 7 items from cache
+[log] 99%
