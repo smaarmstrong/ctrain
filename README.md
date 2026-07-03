@@ -37,7 +37,7 @@ first pass; a daily streak keeps you honest.
 
 ## What it covers
 
-K&R chapters 1–8 as the backbone — tutorial, types & operators, control
+**97 tasks across 14 domains.** K&R chapters 1–8 as the backbone — tutorial, types & operators, control
 flow, functions & program structure, pointers & arrays, structures, stdio,
 and the UNIX system interface — then the standard library, the preprocessor,
 undefined behaviour, data structures & algorithms (linked lists, stacks,
