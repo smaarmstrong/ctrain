@@ -1,0 +1,7 @@
+{
+  "title": "insertion sort and a stable mergesort",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Implement two stable sorts over records and prove stability by preserving input order among equal keys",
+  "difficulty": "core",
+  "est_min": 20
+}

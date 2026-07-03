@@ -1,0 +1,7 @@
+{
+  "title": "an array-backed stack behind a small API",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Implement a fixed-capacity LIFO stack as a set of functions over a struct",
+  "difficulty": "intro",
+  "est_min": 10
+}

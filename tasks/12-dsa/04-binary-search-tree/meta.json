@@ -1,0 +1,7 @@
+{
+  "title": "binary search tree: insert, find, delete, traverse",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Maintain a BST through insertion and all three deletion cases, producing sorted in-order output",
+  "difficulty": "core",
+  "est_min": 20
+}

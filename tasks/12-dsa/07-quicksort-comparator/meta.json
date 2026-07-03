@@ -1,0 +1,7 @@
+{
+  "title": "quicksort with a qsort-style comparator",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Sort opaque elements through void pointers and a comparison function pointer, qsort-signature compatible",
+  "difficulty": "core",
+  "est_min": 20
+}

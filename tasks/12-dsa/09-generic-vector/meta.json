@@ -1,0 +1,7 @@
+{
+  "title": "a generic vector of void pointers",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Build a growable void* container whose behaviour is customised through function pointers, with strict ownership rules",
+  "difficulty": "advanced",
+  "est_min": 30
+}

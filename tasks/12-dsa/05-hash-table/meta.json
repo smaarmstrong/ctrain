@@ -1,0 +1,7 @@
+{
+  "title": "a string-keyed hash table that resizes",
+  "domain": "Data Structures & Algorithms",
+  "objective": "Hash, bucket, and rehash string keys while owning key copies and honouring a load-factor bound",
+  "difficulty": "advanced",
+  "est_min": 30
+}
