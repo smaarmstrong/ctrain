@@ -1,0 +1,7 @@
+{
+  "title": "leak hunt — a reverser that never lets go",
+  "domain": "Tooling: Build, Debug, Diagnose",
+  "objective": "Diagnose a program with ASan or valgrind, then fix it without breaking behaviour",
+  "difficulty": "core",
+  "est_min": 15
+}

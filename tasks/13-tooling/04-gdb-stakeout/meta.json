@@ -1,0 +1,7 @@
+{
+  "title": "gdb stakeout — read a value the program never prints",
+  "domain": "Tooling: Build, Debug, Diagnose",
+  "objective": "Drive gdb: build with -g, set breakpoints and conditions, inspect live state",
+  "difficulty": "core",
+  "est_min": 20
+}
