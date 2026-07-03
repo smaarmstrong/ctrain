@@ -1,0 +1,7 @@
+{
+  "title": "character classes and case swapping",
+  "domain": "The Standard Library",
+  "objective": "Classify and case-map bytes with ctype.h, casting to unsigned char correctly",
+  "difficulty": "intro",
+  "est_min": 8
+}

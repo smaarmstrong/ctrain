@@ -1,0 +1,7 @@
+{
+  "title": "search, split, erase — a string.h toolkit",
+  "domain": "The Standard Library",
+  "objective": "Use strstr/strtok correctly and memmove for overlapping moves",
+  "difficulty": "core",
+  "est_min": 20
+}

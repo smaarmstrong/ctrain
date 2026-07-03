@@ -1,0 +1,7 @@
+{
+  "title": "parse numbers properly — strtol/strtod done right",
+  "domain": "The Standard Library",
+  "objective": "Full-error-handling number parsing: endptr, errno/ERANGE, trailing junk",
+  "difficulty": "core",
+  "est_min": 15
+}

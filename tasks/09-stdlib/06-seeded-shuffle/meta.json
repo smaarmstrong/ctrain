@@ -1,0 +1,7 @@
+{
+  "title": "deterministic Fisher-Yates with srand/rand",
+  "domain": "The Standard Library",
+  "objective": "Seed a PRNG once and implement an exactly specified, reproducible shuffle",
+  "difficulty": "core",
+  "est_min": 15
+}
