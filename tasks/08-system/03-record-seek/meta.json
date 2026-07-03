@@ -1,0 +1,7 @@
+{
+  "title": "fixed-size records with lseek",
+  "domain": "Ch8 · The UNIX System Interface",
+  "objective": "Random access in a file: position with lseek, handle short reads, size via SEEK_END",
+  "difficulty": "core",
+  "est_min": 15
+}

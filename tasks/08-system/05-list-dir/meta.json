@@ -1,0 +1,7 @@
+{
+  "title": "sorted directory listing with sizes",
+  "domain": "Ch8 · The UNIX System Interface",
+  "objective": "Walk a directory with opendir/readdir, stat each entry, and sort for stable output",
+  "difficulty": "core",
+  "est_min": 15
+}

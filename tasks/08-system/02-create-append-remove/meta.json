@@ -1,0 +1,7 @@
+{
+  "title": "create, append, remove — open flags and modes",
+  "domain": "Ch8 · The UNIX System Interface",
+  "objective": "Drive open/close/unlink with the right flags, permission bits and error returns",
+  "difficulty": "intro",
+  "est_min": 10
+}
