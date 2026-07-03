@@ -1,0 +1,3 @@
+21.50C -> whole 21, alarm none
+35.00C -> whole 35, alarm warn
+41.20C -> whole 41, alarm crit

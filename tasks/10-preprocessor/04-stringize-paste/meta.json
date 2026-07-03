@@ -1,0 +1,7 @@
+{
+  "title": "Stringize, paste, and variadic logging",
+  "domain": "Preprocessor & Macros",
+  "objective": "Use # and ## correctly (including the expand-first helper trick) and build a variadic printf-style macro",
+  "difficulty": "advanced",
+  "est_min": 25
+}

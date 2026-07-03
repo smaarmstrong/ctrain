@@ -1,0 +1,7 @@
+{
+  "title": "Include guards across a small header family",
+  "domain": "Preprocessor & Macros",
+  "objective": "Make headers safe against repeated and nested inclusion with correctly scoped include guards",
+  "difficulty": "core",
+  "est_min": 15
+}

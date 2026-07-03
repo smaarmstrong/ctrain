@@ -1,0 +1,7 @@
+{
+  "title": "Macro, function, or constant — pick the right tool",
+  "domain": "Preprocessor & Macros",
+  "objective": "Choose between an object-like macro, a sizeof-based macro and a real function based on what each requirement forces",
+  "difficulty": "core",
+  "est_min": 20
+}
