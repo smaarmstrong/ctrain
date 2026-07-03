@@ -1,0 +1,7 @@
+{
+  "title": "a color palette, the modern way",
+  "domain": "Ch4 · Functions & Program Structure",
+  "objective": "Use designated initializers for an enum-indexed table, a static inline helper in a header, and _Static_assert",
+  "difficulty": "advanced",
+  "est_min": 20
+}
