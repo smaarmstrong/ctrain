@@ -1,0 +1,7 @@
+{
+  "title": "sort and search a shelf of books",
+  "domain": "The Standard Library",
+  "objective": "Write qsort comparators over structs and reuse them with bsearch",
+  "difficulty": "core",
+  "est_min": 20
+}

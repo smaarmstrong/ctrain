@@ -1,0 +1,7 @@
+{
+  "title": "floating-point toolbox — classify and round",
+  "domain": "The Standard Library",
+  "objective": "Handle NaN/inf/subnormals with fpclassify and round correctly with math.h",
+  "difficulty": "core",
+  "est_min": 15
+}
