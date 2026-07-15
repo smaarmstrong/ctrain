@@ -22,6 +22,7 @@
 
 #include <ctype.h>
 #include <dirent.h>
+#include <fcntl.h>
 #include <stdarg.h>
 #include <errno.h>
 #include <limits.h>
@@ -34,6 +35,9 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "sr.h"
+#include "lesson.h"
+
 #define MAX_TASKS 512
 #define SLEN 256
 #define PLEN PATH_MAX
@@ -41,6 +45,14 @@
 /* ---- colours (disabled when stdout is not a terminal) ------------------- */
 
 static int tty;
+
+/* How the learner invoked us, so every hint names a command they can actually
+ * run. self_cmd is the runnable path (for hints that take an <id>, e.g.
+ * "ctrain solution 03-swap"); invoke_cmd is what to suggest for the plain
+ * verbs — "make <verb>" when run under make (MAKELEVEL set), else self_cmd. */
+static const char *self_cmd = "./ctrain";
+static const char *invoke_cmd = "./ctrain";
+
 #define GRN(s) (tty ? "\033[32m" s "\033[0m" : s)
 #define RED(s) (tty ? "\033[31m" s "\033[0m" : s)
 #define YEL(s) (tty ? "\033[33m" s "\033[0m" : s)
@@ -318,7 +330,7 @@ static struct task *resolve(const char *ident)
     if (nfound == 1)
         return found;
     if (nfound == 0) {
-        fprintf(stderr, "No task matching '%s'. Try: ctrain list\n", ident);
+        fprintf(stderr, "No task matching '%s'. Try: %s list\n", ident, self_cmd);
     } else {
         fprintf(stderr, "'%s' is ambiguous:", ident);
         for (int i = 0; i < ntasks; i++)
@@ -342,6 +354,8 @@ struct entry {
     char status[16]; /* "done" | "started" */
     int attempts;
     char completed[11];
+    int reps;        /* successful passes so far (spaced repetition) */
+    char due[11];    /* next review date YYYY-MM-DD, "" = none scheduled */
 };
 
 static struct entry entries[MAX_TASKS];
@@ -349,6 +363,9 @@ static int nentries;
 static int xp;
 static int streak_count;
 static char streak_last[11];
+static char current_id[SLEN];   /* task train/learn/start last handed you */
+static int recent_picks[8];     /* recent train pick kinds (SR_NEW/SR_REVIEW) */
+static int nrecent;
 
 static void state_path(char out[PLEN])
 {
@@ -371,6 +388,8 @@ static struct entry *entry_for(const char *id, int create)
     pathf(e->status, sizeof e->status, "started");
     e->attempts = 0;
     e->completed[0] = '\0';
+    e->reps = 0;
+    e->due[0] = '\0';
     return e;
 }
 
@@ -383,19 +402,40 @@ static void load_state(void)
         return;
     char *save = NULL;
     for (char *line = strtok_r(body, "\n", &save); line; line = strtok_r(NULL, "\n", &save)) {
-        char a[SLEN], b[SLEN], c[SLEN];
-        int n;
+        char a[SLEN], b[SLEN], c[SLEN], d[SLEN];
+        int n, reps;
         if (sscanf(line, "xp %d", &n) == 1) {
             xp = n;
         } else if (sscanf(line, "streak %d %10s", &n, a) == 2) {
             streak_count = n;
             pathf(streak_last, sizeof streak_last, "%s", a);
-        } else if (sscanf(line, "task %255s %15s %d %10s", a, b, &n, c) == 4) {
-            struct entry *e = entry_for(a, 1);
-            if (e) {
-                pathf(e->status, sizeof e->status, "%s", b);
-                e->attempts = n;
-                pathf(e->completed, sizeof e->completed, "%s", strcmp(c, "-") ? c : "");
+        } else if (sscanf(line, "current %255s", a) == 1) {
+            pathf(current_id, sizeof current_id, "%s", a);
+        } else if (strncmp(line, "recent ", 7) == 0) {
+            /* "recent new review ..." — kinds of the last few train picks */
+            char *rs = NULL;
+            nrecent = 0;
+            for (char *tok = strtok_r(line + 7, " ", &rs);
+                 tok && nrecent < (int)(sizeof recent_picks / sizeof *recent_picks);
+                 tok = strtok_r(NULL, " ", &rs))
+                recent_picks[nrecent++] = strcmp(tok, "review") == 0 ? SR_REVIEW : SR_NEW;
+        } else {
+            /* task <id> <status> <attempts> <completed> [reps] [due]
+             * The last two fields are optional so older progress files load. */
+            int got = sscanf(line, "task %255s %15s %d %10s %d %10s",
+                             a, b, &n, c, &reps, d);
+            if (got >= 4) {
+                struct entry *e = entry_for(a, 1);
+                if (e) {
+                    pathf(e->status, sizeof e->status, "%s", b);
+                    e->attempts = n;
+                    pathf(e->completed, sizeof e->completed, "%s", strcmp(c, "-") ? c : "");
+                    e->reps = got >= 5 ? reps : 0;
+                    if (got >= 6 && strcmp(d, "-") != 0)
+                        pathf(e->due, sizeof e->due, "%s", d);
+                    else
+                        e->due[0] = '\0';
+                }
             }
         }
     }
@@ -419,9 +459,18 @@ static void save_state(void)
     }
     fprintf(f, "xp %d\n", xp);
     fprintf(f, "streak %d %s\n", streak_count, streak_last[0] ? streak_last : "-");
+    if (current_id[0])
+        fprintf(f, "current %s\n", current_id);
+    if (nrecent > 0) {
+        fputs("recent", f);
+        for (int i = 0; i < nrecent; i++)
+            fprintf(f, " %s", recent_picks[i] == SR_REVIEW ? "review" : "new");
+        fputc('\n', f);
+    }
     for (int i = 0; i < nentries; i++)
-        fprintf(f, "task %s %s %d %s\n", entries[i].id, entries[i].status,
-                entries[i].attempts, entries[i].completed[0] ? entries[i].completed : "-");
+        fprintf(f, "task %s %s %d %s %d %s\n", entries[i].id, entries[i].status,
+                entries[i].attempts, entries[i].completed[0] ? entries[i].completed : "-",
+                entries[i].reps, entries[i].due[0] ? entries[i].due : "-");
     fclose(f);
 }
 
@@ -435,6 +484,61 @@ static void bump_streak(void)
     long now = date_ordinal(today);
     streak_count = (last >= 0 && now - last == 1) ? streak_count + 1 : 1;
     pathf(streak_last, sizeof streak_last, "%s", today);
+}
+
+static long today_ordinal(void)
+{
+    char t[11];
+    today_str(t);
+    return date_ordinal(t);
+}
+
+/* Record the next review date, sr_review_interval(reps) days out from today. */
+static void schedule_review(struct entry *e, int reps)
+{
+    e->reps = reps;
+    char today[11];
+    today_str(today);
+    struct tm tm = {0};
+    if (sscanf(today, "%d-%d-%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday) != 3) {
+        e->due[0] = '\0';
+        return;
+    }
+    tm.tm_year -= 1900;
+    tm.tm_mon -= 1;
+    tm.tm_hour = 12; /* midday avoids DST edge cases, as in date_ordinal */
+    tm.tm_mday += (int)sr_review_interval(reps);
+    mktime(&tm); /* normalises an overflowed day-of-month */
+    strftime(e->due, sizeof e->due, "%Y-%m-%d", &tm);
+}
+
+/* ---- fundamentals-first ordering ----------------------------------------- */
+
+static int curriculum_cmp(const void *a, const void *b)
+{
+    int ia = *(const int *)a, ib = *(const int *)b;
+    return sr_curriculum_cmp(tasks[ia].id, tasks[ib].id);
+}
+
+/* Fill idx[0..ntasks) with task indices in teaching order (see sr.h). */
+static void curriculum_order(int *idx)
+{
+    for (int i = 0; i < ntasks; i++)
+        idx[i] = i;
+    qsort(idx, (size_t)ntasks, sizeof *idx, curriculum_cmp);
+}
+
+/* First not-yet-done task in teaching order; resumes in-progress work too. */
+static struct task *next_new(void)
+{
+    int idx[MAX_TASKS];
+    curriculum_order(idx);
+    for (int k = 0; k < ntasks; k++) {
+        struct entry *e = entry_for(tasks[idx[k]].id, 0);
+        if (!(e && strcmp(e->status, "done") == 0))
+            return &tasks[idx[k]];
+    }
+    return NULL;
 }
 
 /* ---- work directory ------------------------------------------------------ */
@@ -564,7 +668,11 @@ static void cmd_list(void)
             putchar('\n');
     }
     print_status_line();
-    printf("%sStart one with:  ctrain start <name>%s\n", dim_on(), col_off());
+    printf("%sNew to this?      %s%s learn%s%s  teaches the next one first.%s\n",
+           dim_on(), col_off(), invoke_cmd, dim_on(), dim_on(), col_off());
+    printf("%sKnow it already?  %s%s train%s%s  just picks what to practise.%s\n",
+           dim_on(), col_off(), invoke_cmd, dim_on(), dim_on(), col_off());
+    printf("%sOr start one by name:  %s start <name>%s\n", dim_on(), self_cmd, col_off());
 }
 
 static void cmd_status(void)
@@ -599,9 +707,10 @@ static void show_prompt(const struct task *t)
     putchar('\n');
 }
 
-static void cmd_start(const char *ident)
+/* Show a task's spec, create its work dir if needed, mark it current. Shared by
+ * start, train and learn. */
+static void launch_task(struct task *t)
 {
-    struct task *t = resolve(ident);
     show_prompt(t);
 
     char wdir[PLEN], main_c[PLEN];
@@ -615,19 +724,41 @@ static void cmd_start(const char *ident)
         materialise_starter(t, wdir);
     }
     entry_for(t->id, 1);
+    pathf(current_id, sizeof current_id, "%s", t->id);
     save_state();
-    printf("%sReady.%s%s  Edit %s/main.c then:  %sctrain check %s\n",
-           tty ? "\033[32m" : "", col_off(), dim_on(), wdir, col_off(), t->name);
+    printf("%sReady.%s%s  Edit %s/main.c then:  %s%s check%s\n",
+           tty ? "\033[32m" : "", col_off(), dim_on(), wdir, col_off(),
+           invoke_cmd, col_off());
+}
+
+static void cmd_start(const char *ident)
+{
+    launch_task(resolve(ident));
+}
+
+/* Resolve an id, falling back to the current task when none is given. Exits
+ * with a helpful message if there is nothing to act on. */
+static struct task *resolve_or_current(const char *ident, const char *verb)
+{
+    if (!ident || !*ident)
+        ident = current_id[0] ? current_id : NULL;
+    if (!ident) {
+        fprintf(stderr, "nothing to %s — run '%s train' first, "
+                        "or name a task: %s %s <id>\n",
+                verb, invoke_cmd, self_cmd, verb);
+        exit(1);
+    }
+    return resolve(ident);
 }
 
 static void cmd_check(const char *ident)
 {
-    struct task *t = resolve(ident);
+    struct task *t = resolve_or_current(ident, "check");
     char wdir[PLEN];
     work_dir(t, wdir);
     struct stat st;
     if (stat(wdir, &st) != 0) {
-        printf("No work directory yet — run:  ctrain start %s\n", t->name);
+        printf("No work directory yet — run:  %s start %s\n", self_cmd, t->name);
         exit(1);
     }
     printf("\n%sGrading: %s%s\n", bld_on(), t->title, col_off());
@@ -635,16 +766,26 @@ static void cmd_check(const char *ident)
     struct entry *e = entry_for(t->id, 1);
     e->attempts++;
     if (rc == 0) {
-        int first = strcmp(e->status, "done") != 0;
+        int was_review = strcmp(e->status, "done") == 0;
         pathf(e->status, sizeof e->status, "done");
         today_str(e->completed);
-        if (first) {
-            int gain = 10 + t->est_min;
-            xp += gain;
-            bump_streak();
-            printf("\n%s+%d XP%s   (streak %d\xF0\x9F\x94\xA5)\n",
-                   tty ? "\033[32m" : "", gain, col_off(), streak_count);
+        int reps = was_review ? e->reps + 1 : 1;
+        int gain = was_review ? 5 : 10 + t->est_min; /* reviews are cheaper */
+        schedule_review(e, reps);
+        xp += gain;
+        bump_streak();
+        printf("\n%s+%d XP%s   (streak %d\xF0\x9F\x94\xA5)\n",
+               tty ? "\033[32m" : "", gain, col_off(), streak_count);
+        printf("%sNext review in %ldd.  Next task:  %s train%s\n",
+               dim_on(), sr_review_interval(reps), invoke_cmd, col_off());
+    } else {
+        if (strcmp(e->status, "done") == 0) {
+            /* a lapse on a task you'd passed — relearn from the start, due now */
+            e->reps = 0;
+            today_str(e->due);
         }
+        printf("%sFix it and re-run  %s check%s%s   (stuck?  %s solution %s)%s\n",
+               dim_on(), invoke_cmd, col_off(), dim_on(), self_cmd, t->name, col_off());
     }
     save_state();
     exit(rc == 0 ? 0 : 1);
@@ -652,7 +793,7 @@ static void cmd_check(const char *ident)
 
 static void cmd_solution(const char *ident)
 {
-    struct task *t = resolve(ident);
+    struct task *t = resolve_or_current(ident, "solution");
     printf("\n%sReference solution — %s%s\n", bld_on(), t->title, col_off());
     printf("%s(one valid way; the grader accepts any correct implementation)%s\n",
            dim_on(), col_off());
@@ -698,7 +839,7 @@ static void cmd_solution(const char *ident)
 
 static void cmd_reset(const char *ident)
 {
-    struct task *t = resolve(ident);
+    struct task *t = resolve_or_current(ident, "reset");
     char wdir[PLEN], main_c[PLEN], bak[PLEN];
     work_dir(t, wdir);
     pathf(main_c, sizeof main_c, "%s/main.c", wdir);
@@ -716,21 +857,306 @@ static void cmd_reset(const char *ident)
     printf("%sReset.%s Starter restored in %s\n", tty ? "\033[32m" : "", col_off(), wdir);
 }
 
+/* ---- train: pick the next task automatically ----------------------------- */
+
+static void cmd_train(void)
+{
+    if (ntasks == 0) {
+        printf("%sNo tasks found yet.%s\n", dim_on(), col_off());
+        return;
+    }
+    int idx[MAX_TASKS];
+    curriculum_order(idx);
+    static sr_task sts[MAX_TASKS];
+    for (int k = 0; k < ntasks; k++) {
+        struct entry *e = entry_for(tasks[idx[k]].id, 0);
+        sts[k].passed = e && strcmp(e->status, "done") == 0;
+        sts[k].attempts = e ? e->attempts : 0;
+        sts[k].scheduled = e && e->due[0];
+        sts[k].due_ord = sts[k].scheduled ? date_ordinal(e->due) : 0;
+    }
+    long today = today_ordinal();
+    int kind = SR_NONE;
+    int chosen = sr_choose(sts, ntasks, today, recent_picks, nrecent, &kind);
+
+    if (chosen < 0) {
+        putchar('\n');
+        printf("%sAll caught up — nothing due and no new tasks.%s\n",
+               tty ? "\033[32m\033[1m" : "", col_off());
+        putchar('\n');
+        print_status_line();
+        return;
+    }
+
+    struct task *t = &tasks[idx[chosen]];
+
+    /* remember this pick (window of 4) for the two-in-a-row wall */
+    int cap = 4;
+    if (nrecent >= cap) {
+        memmove(recent_picks, recent_picks + 1, (size_t)(cap - 1) * sizeof *recent_picks);
+        recent_picks[cap - 1] = kind;
+        nrecent = cap;
+    } else {
+        recent_picks[nrecent++] = kind;
+    }
+
+    char reason[128];
+    if (kind == SR_REVIEW) {
+        long over = sts[chosen].scheduled ? today - sts[chosen].due_ord : 0;
+        if (over > 0)
+            snprintf(reason, sizeof reason, "review — %ldd overdue", over);
+        else
+            snprintf(reason, sizeof reason, "due for review");
+    } else if (sts[chosen].attempts > 0) {
+        snprintf(reason, sizeof reason, "resume — started but not yet passed");
+    } else {
+        snprintf(reason, sizeof reason, "new material, next in sequence");
+    }
+
+    putchar('\n');
+    print_status_line();
+    printf("%s%s%s  %s%s%s\n",
+           kind == SR_REVIEW ? (tty ? "\033[33m" : "") : (tty ? "\033[32m" : ""),
+           kind == SR_REVIEW ? "REVIEW" : " NEW  ", col_off(),
+           dim_on(), reason, col_off());
+    if (kind == SR_REVIEW)
+        printf("%s(your last solution is kept — re-solve from memory, or %s reset %s "
+               "for a clean slate)%s\n", dim_on(), self_cmd, t->name, col_off());
+    launch_task(t);
+}
+
+/* ---- learn: an interactive tutor ----------------------------------------- */
+
+/* Prompt the learner and return the first non-space key pressed, lowercased.
+ * A closed/empty stdin (piped, non-interactive) reads as Enter ('\n'). */
+static int ask_key(const char *prompt)
+{
+    fputs(prompt, stdout);
+    fflush(stdout);
+    char buf[64];
+    if (!fgets(buf, sizeof buf, stdin)) {
+        putchar('\n');
+        return '\n';
+    }
+    for (const char *p = buf; *p; p++)
+        if (*p != ' ' && *p != '\t')
+            return tolower((unsigned char)*p);
+    return '\n';
+}
+
+static void print_block(const char *src)
+{
+    for (const char *p = src; *p;) {
+        const char *nl = strchr(p, '\n');
+        int len = nl ? (int)(nl - p) : (int)strlen(p);
+        printf("    %s%.*s%s\n", tty ? "\033[32m" : "", len, p, col_off());
+        if (!nl)
+            break;
+        p = nl + 1;
+    }
+}
+
+static void rm_temp(const char *dir)
+{
+    static const char *names[] = {"snippet.c", "snippet", "cc.log"};
+    char p[PLEN];
+    for (size_t i = 0; i < sizeof names / sizeof *names; i++) {
+        pathf(p, sizeof p, "%s/%s", dir, names[i]);
+        unlink(p);
+    }
+    rmdir(dir);
+}
+
+/* Compile and run a lesson's ```run``` block as a standalone C program so the
+ * learner sees real output — the C analogue of pytrain running Python. */
+static void compile_and_run(const char *src)
+{
+    const char *tmp = getenv("TMPDIR");
+    if (!tmp || !*tmp)
+        tmp = "/tmp";
+    char dir[PLEN];
+    pathf(dir, sizeof dir, "%s/ctrain-lesson.XXXXXX", tmp);
+    if (!mkdtemp(dir)) {
+        printf("%s  (could not create a temp dir to run the snippet)%s\n", dim_on(), col_off());
+        return;
+    }
+    char cpath[PLEN], bpath[PLEN], log[PLEN];
+    pathf(cpath, sizeof cpath, "%s/snippet.c", dir);
+    pathf(bpath, sizeof bpath, "%s/snippet", dir);
+    pathf(log, sizeof log, "%s/cc.log", dir);
+    FILE *f = fopen(cpath, "w");
+    if (f) {
+        fputs(src, f);
+        fputc('\n', f);
+        fclose(f);
+    }
+
+    const char *cc = getenv("CC");
+    if (!cc || !*cc)
+        cc = "cc";
+
+    /* compile, capturing warnings/errors to a log we can show on failure */
+    fflush(stdout);
+    pid_t pid = fork();
+    if (pid == 0) {
+        int fd = open(log, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd >= 0) {
+            dup2(fd, 1);
+            dup2(fd, 2);
+            close(fd);
+        }
+        execlp(cc, cc, "-std=c11", "-Wall", "-o", bpath, cpath, "-lm", (char *)NULL);
+        _exit(127);
+    }
+    int status = 0;
+    waitpid(pid, &status, 0);
+    int crc = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
+    if (crc != 0) {
+        printf("%s  (it didn't compile — the compiler said:)%s\n", dim_on(), col_off());
+        char *cclog = read_file(log);
+        if (cclog) {
+            for (char *line = strtok(cclog, "\n"); line; line = strtok(NULL, "\n"))
+                printf("    %s%s%s\n", dim_on(), line, col_off());
+            free(cclog);
+        }
+        rm_temp(dir);
+        return;
+    }
+
+    /* run it — inherit stdout/stderr so output appears live */
+    fflush(stdout);
+    pid = fork();
+    if (pid == 0) {
+        execl(bpath, bpath, (char *)NULL);
+        _exit(127);
+    }
+    waitpid(pid, &status, 0);
+    rm_temp(dir);
+}
+
+/* Walk a parsed lesson. Returns 0 if the learner quit early, 1 if finished. */
+static int run_lesson(lesson *L)
+{
+    for (int i = 0; i < L->n; i++) {
+        lesson_beat *b = &L->beats[i];
+        if (b->kind == BEAT_PROSE) {
+            fputs(b->text, stdout);
+            putchar('\n');
+        } else if (b->kind == BEAT_PAUSE) {
+            if (ask_key(DIM("\n  [Enter to continue \xC2\xB7 q to stop] ")) == 'q')
+                return 0;
+            putchar('\n');
+        } else { /* BEAT_RUN */
+            putchar('\n');
+            printf("%s  Try this — C:%s\n", bld_on(), col_off());
+            print_block(b->text);
+            int k = ask_key(DIM("  [Enter to compile & run it \xC2\xB7 s to skip \xC2\xB7 q to stop] "));
+            if (k == 'q')
+                return 0;
+            if (k == 's')
+                continue;
+            printf("%s  \xE2\x94\x80\xE2\x94\x80 output \xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80%s\n", dim_on(), col_off());
+            compile_and_run(b->text);
+            printf("%s  \xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80\xE2\x94\x80%s\n", dim_on(), col_off());
+        }
+    }
+    return 1;
+}
+
+static void offer_setup(struct task *t)
+{
+    printf("%sSet up its work directory and try it now? %s", bld_on(), col_off());
+    if (ask_key(DIM("[Enter = yes, q = later] ")) != 'q')
+        launch_task(t);
+    else
+        printf("%sWhen you're ready:  %s start %s%s\n", dim_on(), self_cmd, t->name, col_off());
+}
+
+static void cmd_learn(const char *ident)
+{
+    struct task *t;
+    if (ident && *ident) {
+        t = resolve(ident);
+    } else {
+        t = next_new();
+        if (!t) {
+            printf("%sYou've passed every task already. Revisit a lesson with:  %s%s learn <id>\n",
+                   dim_on(), col_off(), self_cmd);
+            return;
+        }
+    }
+
+    printf("\n%sLESSON — %s: %s%s%s  [%s]%s\n", bld_on(), t->domain, t->title,
+           col_off(), dim_on(), t->id, col_off());
+    printf("%sobjective: %s%s\n", dim_on(), t->objective, col_off());
+    for (int i = 0; i < 60; i++)
+        fputs("─", stdout);
+    putchar('\n');
+
+    char lpath[PLEN];
+    pathf(lpath, sizeof lpath, "%s/learn.md", t->dir);
+    char *body = read_file(lpath);
+    if (!body) {
+        printf("%sNo written lesson for this task yet — read the spec, give it a go,%s\n",
+               dim_on(), col_off());
+        printf("%sand reveal a worked solution with  %s%s solution%s\n\n",
+               dim_on(), col_off(), invoke_cmd, col_off());
+        char ppath[PLEN];
+        pathf(ppath, sizeof ppath, "%s/prompt.md", t->dir);
+        char *prompt = read_file(ppath);
+        if (prompt) {
+            fputs(prompt, stdout);
+            free(prompt);
+        }
+        for (int i = 0; i < 60; i++)
+            fputs("─", stdout);
+        putchar('\n');
+        offer_setup(t);
+        return;
+    }
+
+    lesson L = lesson_parse(body);
+    free(body);
+    int finished = run_lesson(&L);
+    lesson_free(&L);
+    for (int i = 0; i < 60; i++)
+        fputs("─", stdout);
+    putchar('\n');
+    if (!finished) {
+        printf("%sLesson paused. Pick it back up any time:  %s%s learn %s\n",
+               dim_on(), col_off(), self_cmd, t->name);
+        return;
+    }
+    printf("%sThat's the lesson.%s%s  Best way to make it stick is to do it yourself.%s\n",
+           tty ? "\033[32m" : "", col_off(), dim_on(), col_off());
+    offer_setup(t);
+}
+
 static void usage(void)
 {
     printf("ctrain — a console trainer for learning C (K&R-structured)\n\n"
+           "New to the material?  Let it teach you first:\n"
+           "  ctrain learn             teach the next new task, then set it up to try\n"
+           "  ctrain train             auto-pick what to do next (a review, or new work)\n\n"
            "  ctrain list              all tasks, grouped by chapter, with status\n"
            "  ctrain start  <id>       show a task and create its work directory\n"
-           "  ctrain check  <id>       compile + grade your code\n"
-           "  ctrain solution <id>     reveal a reference solution\n"
-           "  ctrain reset  <id>       restore the starter (yours -> main.c.bak)\n"
+           "  ctrain check  [id]       compile + grade your code (defaults to current task)\n"
+           "  ctrain solution [id]     reveal a reference solution\n"
+           "  ctrain reset  [id]       restore the starter (yours -> main.c.bak)\n"
            "  ctrain status            XP, streak, completion\n\n"
-           "<id> is \"domain/nn-name\" or just the unique trailing name.\n");
+           "<id> is \"domain/nn-name\" or just the unique trailing name. learn/train\n"
+           "pick it for you; check/solution/reset default to the current task.\n");
 }
 
 int main(int argc, char **argv)
 {
     tty = isatty(1);
+    /* Name commands the way the learner invoked us: self_cmd is a runnable
+     * path for hints that take an <id>; invoke_cmd is `make` when run under
+     * make (MAKELEVEL set), so `make check` is suggested for the plain verbs. */
+    self_cmd = (argv[0] && argv[0][0]) ? argv[0] : "./ctrain";
+    invoke_cmd = getenv("MAKELEVEL") ? "make" : self_cmd;
+
     find_root(argv[0]);
     discover();
     load_state();
@@ -741,26 +1167,29 @@ int main(int argc, char **argv)
         return 0;
     }
     const char *cmd = argv[1];
+    const char *arg = argc >= 3 ? argv[2] : NULL;
     if (strcmp(cmd, "list") == 0) {
         cmd_list();
     } else if (strcmp(cmd, "status") == 0) {
         cmd_status();
-    } else if (strcmp(cmd, "start") == 0 || strcmp(cmd, "check") == 0 ||
-               strcmp(cmd, "solution") == 0 || strcmp(cmd, "reset") == 0) {
-        if (argc < 3) {
-            fprintf(stderr, "Usage: ctrain %s <id>\n", cmd);
+    } else if (strcmp(cmd, "train") == 0 || strcmp(cmd, "next") == 0) {
+        cmd_train();
+    } else if (strcmp(cmd, "learn") == 0) {
+        cmd_learn(arg);
+    } else if (strcmp(cmd, "check") == 0) {
+        cmd_check(arg);
+    } else if (strcmp(cmd, "solution") == 0) {
+        cmd_solution(arg);
+    } else if (strcmp(cmd, "reset") == 0) {
+        cmd_reset(arg);
+    } else if (strcmp(cmd, "start") == 0) {
+        if (!arg) {
+            fprintf(stderr, "Usage: %s start <id>   (or just: %s train)\n", self_cmd, invoke_cmd);
             return 1;
         }
-        if (strcmp(cmd, "start") == 0)
-            cmd_start(argv[2]);
-        else if (strcmp(cmd, "check") == 0)
-            cmd_check(argv[2]);
-        else if (strcmp(cmd, "solution") == 0)
-            cmd_solution(argv[2]);
-        else
-            cmd_reset(argv[2]);
+        cmd_start(arg);
     } else {
-        fprintf(stderr, "Unknown command '%s'. Try: ctrain help\n", cmd);
+        fprintf(stderr, "Unknown command '%s'. Try: %s help\n", cmd, self_cmd);
         return 1;
     }
     return 0;

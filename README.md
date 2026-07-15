@@ -16,24 +16,48 @@ stop.
 The trainer itself is written in C11. Building it is lesson zero:
 
 ```sh
-make          # produces ./ctrain
+make ctrain   # produces ./ctrain  (bare `make` just lists the targets)
 ./ctrain list
 ```
 
 ## Workflow
 
+New to C? Let the trainer teach you, then decide what to practise for you:
+
 ```sh
-./ctrain list                # tasks grouped by K&R chapter, with your status
-./ctrain start counting     # print the spec, create work/<task>/main.c
-$EDITOR work/01-tutorial/03-counting/main.c
-./ctrain check counting     # compile + behavioural tests + sanitizers
-./ctrain solution counting  # one reference implementation
-./ctrain reset counting     # restore starter (your code -> main.c.bak)
-./ctrain status              # XP, daily streak, completion
+make learn                   # teach the next task, then set it up to try
+$EDITOR work/01-tutorial/01-hello-world/main.c
+make check                   # grade the task you're on (defaults to the current one)
+make train                   # once you know the ropes: pick the next task for you
 ```
 
-Progress is stored in `~/.local/state/ctrain/progress`. XP is awarded on
-first pass; a daily streak keeps you honest.
+`make learn` walks you through a paced lesson — prose, pauses, and runnable
+steps that **compile and run real C** so you see the output — then hands off
+to a solo attempt. `make train` is the autopilot: it gives you the next new
+task in a fundamentals-first order, or brings back an older one for a
+spaced-repetition review when it's due (never more than two reviews in a row
+while new material waits). Tasks without a written lesson fall back to showing
+the spec.
+
+The full CLI, for driving a specific task by id:
+
+```sh
+./ctrain list                   # tasks grouped by K&R chapter, with your status
+./ctrain learn                  # teach the next new task (or: learn <id>)
+./ctrain train                  # auto-pick the next task (review or new)
+./ctrain start  hello-world     # print the spec, create work/<task>/main.c
+./ctrain check  [id]            # compile + behavioural tests + sanitizers
+./ctrain solution [id]          # one reference implementation
+./ctrain reset  [id]            # restore starter (your code -> main.c.bak)
+./ctrain status                 # XP, daily streak, completion
+```
+
+`<id>` is `domain/nn-name` or the unique trailing name; `check`, `solution`
+and `reset` default to the task `learn`/`train`/`start` last gave you.
+
+Progress is stored in `~/.local/state/ctrain/progress` (reps and next-review
+dates included). XP is awarded on each pass — a full award the first time, a
+smaller one for a review; a daily streak keeps you honest.
 
 ## What it covers
 
@@ -71,7 +95,8 @@ tasks/05-pointers/03-swap/
 ├── starter.c      optional scaffold (copied to work/<task>/main.c)
 ├── test_main.c    optional C test harness linked against your code
 ├── grade.sh       compile → behavioural checks → sanitizer runs
-└── solution.c     one reference implementation (or solution/ for multi-file)
+├── solution.c     one reference implementation (or solution/ for multi-file)
+└── learn.md       optional tutor lesson shown by `learn` (see docs/authoring.md)
 ```
 
 Graders test behaviour, not style: any correct implementation passes.
@@ -84,6 +109,7 @@ starter stub and PASS on the reference solution:
 ```sh
 ./selftest.sh               # natively
 ./selftest.sh --container   # in a gcc:14 container (as CI does)
+make test                   # unit-test the train/learn selection + SR logic
 ```
 
 CI runs the full selftest on every pull request.
