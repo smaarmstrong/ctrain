@@ -1,4 +1,5 @@
 ctrain
+tests/test_selection
 work/
 *.o
 a.out
