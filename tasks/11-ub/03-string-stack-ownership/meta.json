@@ -3,5 +3,8 @@
   "domain": "Undefined Behaviour & Memory Safety",
   "objective": "Diagnose ownership bugs: a pop that frees what it hands out, a destroy that can free twice",
   "difficulty": "advanced",
-  "est_min": 25
+  "est_min": 25,
+  "prereq": [
+    "00-foundations/04-reading-a-crash"
+  ]
 }

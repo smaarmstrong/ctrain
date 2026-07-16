@@ -5,7 +5,14 @@ what a modern C programmer needs that the book predates. Each objective is
 ticked when at least one task exercises it. Canonical K&R exercises appear
 in adapted, re-worded form.
 
-97 tasks across 14 domains — every objective below is exercised by at least one task.
+102 tasks across 15 domains — every objective below is exercised by at least one task.
+
+## 00-foundations — The C Toolchain Itself (5 tasks)
+- [x] the compile-run cycle: source -> cc -> binary -> run; `-o`, `-Wall`, exit status
+- [x] reading compiler diagnostics: file:line:col anatomy, error/warning/note, fix-the-first-error-first
+- [x] make basics: targets, dependencies, recipes (and the Tab), timestamp rebuilds
+- [x] reading a crash: what a segfault is, exit codes 139/134, ASan report anatomy (first frame)
+- [x] gdb first steps: -g, run, bt, quit; recognising runaway recursion
 
 ## 01-tutorial — K&R Ch1: A Tutorial Introduction (8 tasks)
 - [x] hello world, compiling and running (`cc`, `-o`, exit status)

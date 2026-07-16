@@ -46,6 +46,12 @@ int main(void)
     check("days_overdue: negative when in the future", sr_days_overdue(TODAY + 5, TODAY) == -5);
 
     /* ---- fundamentals-first teaching order ---------------------------- */
+    check("domain rank: foundations sorts before everything",
+          sr_domain_rank("00-foundations") == 0 &&
+          sr_domain_rank("00-foundations") < sr_domain_rank("01-tutorial"));
+    check("curriculum_cmp orders foundations before tutorial",
+          sr_curriculum_cmp("00-foundations/01-compile-run",
+                            "01-tutorial/01-hello") < 0);
     check("domain rank: tutorial < types < control < pointers",
           sr_domain_rank("01-tutorial") < sr_domain_rank("02-types") &&
           sr_domain_rank("02-types") < sr_domain_rank("03-control") &&

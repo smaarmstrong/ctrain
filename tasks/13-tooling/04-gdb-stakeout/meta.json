@@ -3,5 +3,8 @@
   "domain": "Tooling: Build, Debug, Diagnose",
   "objective": "Drive gdb: build with -g, set breakpoints and conditions, inspect live state",
   "difficulty": "core",
-  "est_min": 20
+  "est_min": 20,
+  "prereq": [
+    "00-foundations/05-gdb-first-steps"
+  ]
 }
