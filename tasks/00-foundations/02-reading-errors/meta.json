@@ -1,0 +1,7 @@
+{
+  "title": "Reading compiler errors: file, line, message",
+  "domain": "Foundations: The C Toolchain",
+  "objective": "Foundations: decode a compiler diagnostic (file:line:col, error vs warning vs note) and fix errors first-first",
+  "difficulty": "intro",
+  "est_min": 10
+}

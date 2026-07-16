@@ -29,6 +29,13 @@ tasks/<domain>/<nn-name>/
 }
 ```
 
+Optionally add `"prereq": ["00-foundations/04-reading-a-crash"]` — ids of
+foundations lessons the task quietly leans on. If the learner hasn't passed
+one yet, `learn`/`train` print a one-line "learn it first" nudge. Advisory
+only: it never gates or reorders anything, and it goes silent once the
+lesson is passed. Point at the toolchain skill the task assumes, not at the
+previous task in the sequence (the curriculum order already handles that).
+
 ## The grading contract
 
 `grade.sh` runs with these environment variables (set by the runner and by

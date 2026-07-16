@@ -3,5 +3,8 @@
   "domain": "Tooling: Build, Debug, Diagnose",
   "objective": "Read compiler diagnostics and fix every warning without changing the program's behaviour",
   "difficulty": "intro",
-  "est_min": 10
+  "est_min": 10,
+  "prereq": [
+    "00-foundations/02-reading-errors"
+  ]
 }

@@ -3,5 +3,8 @@
   "domain": "Ch1 · Tutorial",
   "objective": "Write, compile and run a first C program with exact output and a clean exit status",
   "difficulty": "intro",
-  "est_min": 5
+  "est_min": 5,
+  "prereq": [
+    "00-foundations/01-compile-run"
+  ]
 }

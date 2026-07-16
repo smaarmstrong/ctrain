@@ -39,6 +39,14 @@ spaced-repetition review when it's due (never more than two reviews in a row
 while new material waits). Tasks without a written lesson fall back to showing
 the spec.
 
+The curriculum opens with a **foundations** domain that teaches the ambient
+toolchain itself — the compile-run cycle, reading compiler errors, make,
+reading a crash (exit codes, ASan reports), and first steps in gdb — before
+any task assumes it. Later tasks that lean on one of those skills carry a
+soft `prereq` pointer: if you haven't passed the lesson yet, `learn`/`train`
+print a one-line "learn it first" nudge. It never blocks anything, and it
+goes quiet once you've passed the lesson.
+
 The full CLI, for driving a specific task by id:
 
 ```sh
@@ -61,7 +69,9 @@ smaller one for a review; a daily streak keeps you honest.
 
 ## What it covers
 
-**97 tasks across 14 domains.** K&R chapters 1–8 as the backbone — tutorial, types & operators, control
+**102 tasks across 15 domains.** A foundations domain first (the toolchain
+itself: cc, compiler diagnostics, make, crashes, gdb), then
+K&R chapters 1–8 as the backbone — tutorial, types & operators, control
 flow, functions & program structure, pointers & arrays, structures, stdio,
 and the UNIX system interface — then the standard library, the preprocessor,
 undefined behaviour, data structures & algorithms (linked lists, stacks,

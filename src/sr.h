@@ -49,6 +49,8 @@ static inline long sr_days_overdue(long due_ord, long today_ord)
 /* Explicit teaching order for NEW material, keyed by the task's domain
  * directory. Fundamentals first, then things that build on them:
  *
+ *   foundations   the ambient toolchain itself — cc, compiler errors, make,
+ *                 crashes, gdb — taught before any task quietly assumes it
  *   tutorial      the toolchain and first programs — everything uses it
  *   types         values, operators, expressions, conversions
  *   control       if / loops / switch — flow over those values
@@ -68,6 +70,7 @@ static inline long sr_days_overdue(long due_ord, long today_ord)
  * match this; making it explicit keeps the intent clear and survives renames.
  * Anything unlisted sorts after these (rank 99), then by id. */
 static const char *SR_DOMAIN_ORDER[] = {
+    "00-foundations",
     "01-tutorial", "02-types",        "03-control", "04-functions",
     "05-pointers", "06-structs",      "07-io",      "08-system",
     "09-stdlib",   "10-preprocessor", "11-ub",      "12-dsa",

@@ -202,7 +202,42 @@ static int json_int(const char *buf, const char *key, int fallback)
     return (int)strtol(p, NULL, 10);
 }
 
+/* "key": ["a", "b", ...] — copy up to max strings into out. Returns the count
+ * (0 when the key is absent or not an array). Elements longer than SLEN-1
+ * are truncated, like json_str. */
+static int json_str_array(const char *buf, const char *key,
+                          char (*out)[SLEN], int max)
+{
+    const char *p = json_find(buf, key);
+    int n = 0;
+    if (!p || *p != '[')
+        return 0;
+    p++;
+    while (*p && *p != ']' && n < max) {
+        while (*p && *p != '"' && *p != ']')
+            p++;
+        if (*p != '"')
+            break;
+        p++;
+        size_t i = 0;
+        while (*p && *p != '"') {
+            if (*p == '\\' && p[1])
+                p++;
+            if (i + 1 < SLEN)
+                out[n][i++] = *p;
+            p++;
+        }
+        out[n][i] = '\0';
+        if (*p == '"')
+            p++;
+        n++;
+    }
+    return n;
+}
+
 /* ---- task discovery ------------------------------------------------------ */
+
+#define MAX_PREREQ 4
 
 struct task {
     char id[SLEN];      /* "05-pointers/03-swap" */
@@ -213,6 +248,8 @@ struct task {
     char objective[SLEN];
     char difficulty[32];
     int est_min;
+    char prereq[MAX_PREREQ][SLEN]; /* soft prerequisites: ids of lessons */
+    int nprereq;
 };
 
 static struct task tasks[MAX_TASKS];
@@ -291,6 +328,7 @@ static void discover(void)
             json_str(meta, "objective", t->objective, sizeof t->objective);
             json_str(meta, "difficulty", t->difficulty, sizeof t->difficulty);
             t->est_min = json_int(meta, "est_min", 5);
+            t->nprereq = json_str_array(meta, "prereq", t->prereq, MAX_PREREQ);
             free(meta);
             ntasks++;
         next_entry:
@@ -310,6 +348,26 @@ static const char *strip_num(const char *s)
     while (isdigit((unsigned char)*p))
         p++;
     return (p > s && *p == '-') ? p + 1 : s;
+}
+
+/* Like resolve() below but soft: NULL when nothing (or more than one thing)
+ * matches, instead of exiting. Used for advisory lookups (prereq pointers)
+ * where a bad id must never break the command being run. */
+static struct task *find_task(const char *ident)
+{
+    for (int i = 0; i < ntasks; i++)
+        if (strcmp(tasks[i].id, ident) == 0)
+            return &tasks[i];
+    struct task *found = NULL;
+    int nfound = 0;
+    for (int i = 0; i < ntasks; i++) {
+        if (strcmp(tasks[i].name, ident) == 0 ||
+            strcmp(strip_num(tasks[i].name), strip_num(ident)) == 0) {
+            found = &tasks[i];
+            nfound++;
+        }
+    }
+    return nfound == 1 ? found : NULL;
 }
 
 static struct task *resolve(const char *ident)
@@ -539,6 +597,28 @@ static struct task *next_new(void)
             return &tasks[idx[k]];
     }
     return NULL;
+}
+
+/* ---- soft prerequisite pointers -------------------------------------------
+ * A task's meta.json may list `prereq` — ids of foundations lessons it leans
+ * on. If the learner hasn't passed one yet, learn/train print a one-line
+ * nudge to take that lesson first. Advisory only: it NEVER blocks or changes
+ * what runs, and goes silent once the lesson has been passed. */
+
+static void prereq_advice(const struct task *t)
+{
+    for (int i = 0; i < t->nprereq; i++) {
+        const struct task *p = find_task(t->prereq[i]);
+        if (!p || p == t)
+            continue;
+        struct entry *e = entry_for(p->id, 0);
+        if (e && strcmp(e->status, "done") == 0)
+            continue;
+        printf("%sheads-up%s%s  this task leans on \"%s\" — new to it? "
+               "learn it first:  %s%s learn %s\n",
+               tty ? "\033[33m" : "", col_off(), dim_on(),
+               p->title[0] ? p->title : p->name, col_off(), self_cmd, p->name);
+    }
 }
 
 /* ---- work directory ------------------------------------------------------ */
@@ -922,6 +1002,7 @@ static void cmd_train(void)
     if (kind == SR_REVIEW)
         printf("%s(your last solution is kept — re-solve from memory, or %s reset %s "
                "for a clean slate)%s\n", dim_on(), self_cmd, t->name, col_off());
+    prereq_advice(t);
     launch_task(t);
 }
 
@@ -1089,6 +1170,7 @@ static void cmd_learn(const char *ident)
     printf("\n%sLESSON — %s: %s%s%s  [%s]%s\n", bld_on(), t->domain, t->title,
            col_off(), dim_on(), t->id, col_off());
     printf("%sobjective: %s%s\n", dim_on(), t->objective, col_off());
+    prereq_advice(t);
     for (int i = 0; i < 60; i++)
         fputs("─", stdout);
     putchar('\n');
