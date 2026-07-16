@@ -1,0 +1,7 @@
+{
+  "title": "make basics: targets, dependencies, recipes",
+  "domain": "Foundations: The C Toolchain",
+  "objective": "Foundations: read and write a minimal Makefile rule and understand why this repo drives everything through make",
+  "difficulty": "intro",
+  "est_min": 10
+}

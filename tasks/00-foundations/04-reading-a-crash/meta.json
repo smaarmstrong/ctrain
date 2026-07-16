@@ -1,0 +1,7 @@
+{
+  "title": "Reading a crash: segfaults, exit codes, ASan",
+  "domain": "Foundations: The C Toolchain",
+  "objective": "Foundations: understand what a segfault is, read crash exit codes, and read the first frame of an AddressSanitizer report",
+  "difficulty": "intro",
+  "est_min": 12
+}

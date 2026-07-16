@@ -1,0 +1,7 @@
+{
+  "title": "The compile-run cycle: source, cc, binary",
+  "domain": "Foundations: The C Toolchain",
+  "objective": "Foundations: understand what a compiler does — turn a source file into a binary with cc and run it",
+  "difficulty": "intro",
+  "est_min": 8
+}
