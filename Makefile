@@ -28,6 +28,11 @@ CTRAIN  := ./ctrain
 .DEFAULT_GOAL := help
 
 ctrain: src/ctrain.c src/sr.h src/lesson.h
+	@command -v $(CC) >/dev/null 2>&1 || { \
+	  printf 'ctrain needs a C compiler ($(CC)) and it is not installed.\n' >&2; \
+	  printf '  Rocky/RHEL:  sudo dnf group install "Development Tools"\n' >&2; \
+	  printf '  (or set CC=clang if you have clang instead)\n' >&2; \
+	  exit 1; }
 	$(CC) $(CFLAGS) -o $@ $<
 
 .PHONY: help learn train next check solution list status cli selftest test clean
