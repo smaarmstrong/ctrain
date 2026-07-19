@@ -86,7 +86,9 @@ temperature tables, word counting, and friends — appear in adapted form).
 ## Requirements
 
 A C compiler (`gcc` or `clang`), `make`, and `bash`. Nothing else — no GUI,
-no package managers, no frameworks. For full memory-safety grading you want
+no package managers, no frameworks. On a fresh Rocky/RHEL box that ships none
+of the build toolchain: `sudo dnf group install "Development Tools"`. For full
+memory-safety grading you want
 a toolchain with ASan/UBSan (any mainstream gcc/clang) or valgrind installed;
 graders detect what is available and degrade gracefully.
 
